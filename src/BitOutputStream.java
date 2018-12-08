@@ -150,25 +150,6 @@ public class BitOutputStream extends OutputStream {
 		bitBuffer |= Integer.toUnsignedLong(value) << (available - numBits);
 		available -= numBits;
 	}
-	public void writeBitsLong(int numBits, Long value) {
-		if (numBits > INT_SIZE || numBits < 1) {
-			throw new RuntimeException("Illegal argument: numBits must be on [1, 32]");
-		}
-		
-		bitsWritten += numBits;
-		if (numBits < 32) {
-		    value = value & ~(~0 << numBits);
-		}
-		if (numBits > available) {
-			bitBuffer |= value >>> (numBits - available);
-			value &= bitMask[numBits - available];
-			numBits -= available;
-			emptyBitBuffer();
-		}
-		
-		bitBuffer |= value << (available - numBits);
-		available -= numBits;
-	}
 	
 	private void emptyBitBuffer() {
 		if (!buffer.hasRemaining()) {
