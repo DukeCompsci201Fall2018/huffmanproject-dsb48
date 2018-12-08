@@ -47,6 +47,10 @@ public class HuffProcessor {
 		HuffNode root = makeTreeFromCounts(freqs);
 		String[] codings = makeCodingsFromTree(root);
 		
+		for (String code : codings) {
+			System.out.println(code);
+		}
+		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);
 		
@@ -77,7 +81,7 @@ public class HuffProcessor {
 		    HuffNode left = pq.remove();
 		    HuffNode right = pq.remove();
 		    int tval = left.myValue + right.myValue;
-		    HuffNode t = new HuffNode(0, tval, left, right);
+		    HuffNode t = new HuffNode(tval, tval, left, right);
 		    pq.add(t);
 		}
 		return pq.remove();
@@ -89,16 +93,21 @@ public class HuffProcessor {
 	    return encodings;
 	}
 	
-    private void findCodes(HuffNode root, String path, String[] encodings) {
-		if (root == null) return;
+	private void findCodes(HuffNode root, String path, String[] encodings) {
+		HuffNode curr = root;
+		if (curr == null) return;
 
-		if (root.myLeft == null && root.myRight == null) {
-			encodings[root.myValue] = path;
+		if (curr.myLeft == null && curr.myRight == null) {
+			encodings[curr.myValue] = path;
 			return;
 		}
-		findCodes(root.myLeft, path+"0", encodings);
-		findCodes(root.myRight, path+"1", encodings);
+		else {
+			findCodes(curr.myLeft, path+"0", encodings);
+			findCodes(curr.myRight, path+"1", encodings);
+		}
 	}
+
+
     
 	private void writeHeader(HuffNode root, BitOutputStream out) {
 		if (root == null) return;
