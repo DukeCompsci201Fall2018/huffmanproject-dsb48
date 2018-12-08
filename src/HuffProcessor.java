@@ -47,10 +47,6 @@ public class HuffProcessor {
 		HuffNode root = makeTreeFromCounts(freqs);
 		String[] codings = makeCodingsFromTree(root);
 		
-		for (String code : codings) {
-			System.out.println(code);
-		}
-		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);
 		
@@ -81,7 +77,7 @@ public class HuffProcessor {
 		    HuffNode left = pq.remove();
 		    HuffNode right = pq.remove();
 		    int tval = left.myValue + right.myValue;
-		    HuffNode t = new HuffNode(tval, tval, left, right);
+		    HuffNode t = new HuffNode(-1, tval, left, right);
 		    pq.add(t);
 		}
 		return pq.remove();
@@ -122,11 +118,10 @@ public class HuffProcessor {
 			int val = in.readBits(BITS_PER_WORD);
 			if (val == -1) break;
 			String code = encodings[val];
-			if (code.length() > 31) out.writeBitsLong(code.length(), Long.parseLong(code,2));
-			else out.writeBits(code.length(), Integer.parseInt(code,2));
+		    out.writeBits(code.length(), Integer.parseInt(code,2));
 		}
 		String code = encodings[PSEUDO_EOF];
-		out.writeBitsLong(code.length(), Long.parseLong(code,2));
+		out.writeBits(code.length(), Integer.parseInt(code,2));
 	}
 	
 	/**
