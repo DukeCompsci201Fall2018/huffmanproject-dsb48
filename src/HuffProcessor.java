@@ -68,7 +68,7 @@ public class HuffProcessor {
 	
 	private HuffNode makeTreeFromCounts(int[] freq) {
 		PriorityQueue<HuffNode> pq = new PriorityQueue<>();
-		for (int index = 0; index < ALPH_SIZE + 1; index++) {
+		for (int index = 0; index < freq.length; index++) {
 			if (freq[index] > 0) {
 				pq.add(new HuffNode(index, freq[index]));
 			}
