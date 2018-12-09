@@ -90,16 +90,15 @@ public class HuffProcessor {
 	}
 	
 	private void findCodes(HuffNode root, String path, String[] encodings) {
-		HuffNode curr = root;
-		if (curr == null) return;
+		if (root == null) return;
 
-		if (curr.myLeft == null && curr.myRight == null) {
-			encodings[curr.myValue] = path;
+		if (root.myLeft == null && root.myRight == null) {
+			encodings[root.myValue] = path;
 			return;
 		}
 		else {
-			findCodes(curr.myLeft, path+"0", encodings);
-			findCodes(curr.myRight, path+"1", encodings);
+			findCodes(root.myLeft, path+"0", encodings);
+			findCodes(root.myRight, path+"1", encodings);
 		}
 	}
 
